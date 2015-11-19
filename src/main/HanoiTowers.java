@@ -86,7 +86,6 @@ public class HanoiTowers extends JPanel{
 		Runnable runnable=new Runnable() {
 
 			public void run() {
-				// TODO Auto-generated method stub
 				JFrame windowFrame=new JFrame("Hanoi");
 				windowFrame.setAlwaysOnTop(true);
 				windowFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -106,40 +105,32 @@ public class HanoiTowers extends JPanel{
 					}
 
 					public void keyPressed(KeyEvent arg0) {
-						// TODO Auto-generated method stub
+
 						switch (arg0.getKeyCode()) {
 							case KeyEvent.VK_LEFT :
-								//System.out.println("Moving a block left.");
-								System.out.println(Tower.activeTower.getLastBlock().location);
-
-
 								switch (Tower.activeTower.getLastBlock().location) {
 									case L:
 									break;
 									case R:
-									//Tower.activeTower.lastBlock.moveFrom(Tower.activeTower);
-									Tower.activeTower.getLastBlock().moveTo(HanoiTowers.towers.get(1));
+									Tower.activeTower.getLastBlock().moveTo(HanoiTowers.getTower(Location.C));
 									break;
 									case C:
-										//Tower.activeTower.lastBlock.moveFrom(Tower.activeTower);
-									Tower.activeTower.getLastBlock().moveTo(HanoiTowers.towers.get(0));
+									Tower.activeTower.getLastBlock().moveTo(HanoiTowers.getTower(Location.L));
 									break;
 								}
 								break;
 
 							case KeyEvent.VK_RIGHT :
-								System.out.println(Tower.activeTower.getLastBlock().location);
+
 								switch (Tower.activeTower.getLastBlock().location) {
 									case L:
-										//Tower.activeTower.lastBlock.moveFrom(Tower.activeTower);
-										Tower.activeTower.getLastBlock().moveTo(HanoiTowers.towers.get(1));
+										Tower.activeTower.getLastBlock().moveTo(HanoiTowers.getTower(Location.C));
 										break;
 									case R:
-									break;
+										break;
 									case C:
-										//Tower.activeTower.lastBlock.moveFrom(Tower.activeTower);
-									Tower.activeTower.getLastBlock().moveTo(HanoiTowers.towers.get(2));
-									break;
+										Tower.activeTower.getLastBlock().moveTo(HanoiTowers.getTower(Location.R));
+										break;
 								}
 
 								break;
@@ -156,6 +147,9 @@ public class HanoiTowers extends JPanel{
 								break;
 							case KeyEvent.VK_DOWN:
 								Tower.activeTower.getLastBlock().rest();
+								break;
+							case KeyEvent.VK_UP:
+								Tower.activeTower.getLastBlock().moveUp();
 								break;
 							default :
 								break;
@@ -190,6 +184,7 @@ class Tower extends Rectangle {
 
 	public void createBlock(Block block) {
 		block.width*=20;
+		block.location=this.location;//todo need?
 		this.addBlock(block);
 	}
 	public Block getLastBlock() {
@@ -203,12 +198,13 @@ class Tower extends Rectangle {
 	}
 	public void addBlock(Block block) {
 		//this.blocks.remove(block);
-		block.location=this.location;//todo need?
+
 		if (this.blocks.size()==0) {
 			block.y=HanoiTowers.FHEIGHT-(50+20);
 		}else {
 			block.y=this.blocks.get(this.blocks.size()-1).y-20;
 		}
+		block.isMovable=false;
 		this.blocks.add(block);
 
 		//this.lastBlock=blocks.get(blocks.size()-1);
@@ -229,6 +225,7 @@ class Tower extends Rectangle {
 class Block extends Rectangle{
 	//final public int width;
 	public Location location;
+	public boolean isMovable=false;
 
 	public Block(int width) {
 		this.width=width;
@@ -263,7 +260,7 @@ class Block extends Rectangle{
 			g.drawRoundRect(this.x, this.y, this.width, 10, 10, 20);
 			g.setColor(Color.GRAY);
 		}
-		
+
 		g.fillRoundRect(this.x, this.y, this.width, 10, 10, 20);
 		g.setColor(Color.BLACK);
 	}
@@ -273,11 +270,27 @@ class Block extends Rectangle{
 
 	}
 	public void moveTo(Tower tower) {
+		if (this.isMovable) {
+			this.x=tower.x;
+			this.location=tower.location;
+		}
 		if (this.location==null) {
 			//return;
 		}
-		this.x=tower.x;
-		this.location=tower.location;
-		}
+		//this.y=20;
+
+
 	}
+
+	public void moveUp() {
+		this.isMovable=true;
+		this.y=100;
+	}
+
+
+
+
+	}
+
+
 
