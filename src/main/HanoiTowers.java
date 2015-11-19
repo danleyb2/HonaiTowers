@@ -108,31 +108,37 @@ public class HanoiTowers extends JPanel{
 
 						switch (arg0.getKeyCode()) {
 							case KeyEvent.VK_LEFT :
-								switch (Tower.activeTower.getLastBlock().location) {
-									case L:
-									break;
-									case R:
-									Tower.activeTower.getLastBlock().moveTo(HanoiTowers.getTower(Location.C));
-									break;
-									case C:
-									Tower.activeTower.getLastBlock().moveTo(HanoiTowers.getTower(Location.L));
-									break;
+								try {
+									switch (Tower.activeTower.getLastBlock().location) {
+										case L:
+										break;
+										case R:
+										Tower.activeTower.getLastBlock().moveTo(HanoiTowers.getTower(Location.C));
+										break;
+										case C:
+										Tower.activeTower.getLastBlock().moveTo(HanoiTowers.getTower(Location.L));
+										break;
+									}
+								} catch (NullPointerException e) {
+
 								}
 								break;
 
 							case KeyEvent.VK_RIGHT :
-
-								switch (Tower.activeTower.getLastBlock().location) {
-									case L:
-										Tower.activeTower.getLastBlock().moveTo(HanoiTowers.getTower(Location.C));
-										break;
-									case R:
-										break;
-									case C:
-										Tower.activeTower.getLastBlock().moveTo(HanoiTowers.getTower(Location.R));
-										break;
+								try {
+									switch (Tower.activeTower.getLastBlock().location) {
+										case L:
+											Tower.activeTower.getLastBlock().moveTo(HanoiTowers.getTower(Location.C));
+											break;
+										case R:
+											break;
+										case C:
+											Tower.activeTower.getLastBlock().moveTo(HanoiTowers.getTower(Location.R));
+											break;
+									}
+								} catch (NullPointerException e) {
+									// TODO: handle exception
 								}
-
 								break;
 							case KeyEvent.VK_A:
 								Tower.activeTower=HanoiTowers.towers.get(0);
@@ -149,8 +155,13 @@ public class HanoiTowers extends JPanel{
 								Tower.activeTower.getLastBlock().rest();
 								break;
 							case KeyEvent.VK_UP:
-								Tower.activeTower.getLastBlock().moveUp();
+								try {
+									Tower.activeTower.getLastBlock().moveUp();
+								} catch (NullPointerException e) {
+
+								}
 								break;
+
 							default :
 								break;
 						}
@@ -191,7 +202,7 @@ class Tower extends Rectangle {
 		try {
 			return this.blocks.get(this.blocks.size()-1);
 		} catch (ArrayIndexOutOfBoundsException e) {
-			System.err.println("No blocks in tower.");
+			//System.err.println("No blocks in tower.");
 			return null;
 		}
 
@@ -236,6 +247,7 @@ class Block extends Rectangle{
 	}
 
 	public void rest() {
+
 		if (HanoiTowers.getTower(this.location).getLastBlock()!=null ) {
 			if(HanoiTowers.getTower(this.location).getLastBlock().width>=this.width) {
 				this.moveFrom(Tower.activeTower);
