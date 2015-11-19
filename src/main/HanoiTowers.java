@@ -37,18 +37,6 @@ public class HanoiTowers extends JPanel{
 		return null;
 
 	}
-	public Tower getRightTower() {
-		return null;
-
-	}
-	public Tower getLeftTower() {
-		return null;
-
-	}
-	public Tower getCenterTower() {
-		return null;
-
-	}
 	public void start() {
 		HanoiTowers.towers=new ArrayList<Tower>();
 		Tower tower=new Tower(10,Location.L);
