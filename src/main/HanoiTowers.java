@@ -236,9 +236,8 @@ class Block extends Rectangle{
 	}
 
 	public void rest() {
-		// TODO Auto-generated method stub
 		if (HanoiTowers.getTower(this.location).getLastBlock()!=null ) {
-			if(HanoiTowers.getTower(this.location).getLastBlock().width>this.width) {
+			if(HanoiTowers.getTower(this.location).getLastBlock().width>=this.width) {
 				this.moveFrom(Tower.activeTower);
 				HanoiTowers
 				.getTower(this.location)
@@ -286,9 +285,6 @@ class Block extends Rectangle{
 		this.isMovable=true;
 		this.y=100;
 	}
-
-
-
 
 	}
 
