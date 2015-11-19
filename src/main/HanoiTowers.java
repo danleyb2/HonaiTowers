@@ -26,6 +26,29 @@ public class HanoiTowers extends JPanel{
 	public static ArrayList<Tower> towers;
 
 	final Thread displayThread;
+
+
+	public static Tower getTower(Location l) {
+		for (Tower tower : towers) {
+			if (tower.location==l) {
+				return tower;
+			}
+		}
+		return null;
+
+	}
+	public Tower getRightTower() {
+		return null;
+
+	}
+	public Tower getLeftTower() {
+		return null;
+
+	}
+	public Tower getCenterTower() {
+		return null;
+
+	}
 	public void start() {
 		HanoiTowers.towers=new ArrayList<Tower>();
 		Tower tower=new Tower(10,Location.L);
@@ -166,7 +189,6 @@ class Tower extends Rectangle {
 	public ArrayList<Block> blocks;
 	public Location location;
 	static Tower activeTower;
-	public Block lastBlock;
 	public Location towerLocation;
 	public Tower(int x, Location c) {
 		this.width=200;
@@ -183,9 +205,14 @@ class Tower extends Rectangle {
 		this.addBlock(block);
 	}
 	public Block getLastBlock() {
-		return this.blocks.get(this.blocks.size()-1);
-	}
+		try {
+			return this.blocks.get(this.blocks.size()-1);
+		} catch (ArrayIndexOutOfBoundsException e) {
+			System.err.println("No blocks in tower.");
+			return null;
+		}
 
+	}
 	public void addBlock(Block block) {
 		//this.blocks.remove(block);
 		block.location=this.location;//todo need?
@@ -195,7 +222,6 @@ class Tower extends Rectangle {
 			block.y=this.blocks.get(this.blocks.size()-1).y-20;
 		}
 		this.blocks.add(block);
-		this.lastBlock=block;
 
 		//this.lastBlock=blocks.get(blocks.size()-1);
 	}
@@ -226,49 +252,32 @@ class Block extends Rectangle{
 
 	public void rest() {
 		// TODO Auto-generated method stub
-		this.moveFrom(Tower.activeTower);
-		switch (this.location) {
-			case L :
+		if (HanoiTowers.getTower(this.location).getLastBlock()!=null ) {
+			if(HanoiTowers.getTower(this.location).getLastBlock().width>this.width) {
+				this.moveFrom(Tower.activeTower);
 				HanoiTowers
-				.towers
-				.get(0)
+				.getTower(this.location)
 				.addBlock(this);
-
-				break;
-			case R:
-				HanoiTowers
-				.towers
-				.get(2)
-				.addBlock(this);
-
-				break;
-			case C:
-				HanoiTowers
-				.towers
-				.get(1)
-				.addBlock(this);
-
-				break;
-			default :
-				break;
+			}else {
+				System.err.println("You cannot add a block there.");
+			}
+		}else {
+			this.moveFrom(Tower.activeTower);
+			HanoiTowers
+			.getTower(this.location)
+			.addBlock(this);
 		}
 	}
 
 	public void draw(Graphics g) {
-		int position=10;
-		/*switch (this.location) {
-			case L :
-				position=10;
-				break;
-				case C:
-					position=200;
-					break;
-
-			default ://R
-				position=400;
-				break;
-		}*/
+		if (this==Tower.activeTower.getLastBlock()) {
+			g.setColor(Color.YELLOW);
+			g.drawRoundRect(this.x, this.y, this.width, 10, 10, 20);
+			g.setColor(Color.GRAY);
+		}
+		
 		g.fillRoundRect(this.x, this.y, this.width, 10, 10, 20);
+		g.setColor(Color.BLACK);
 	}
 	public void moveFrom(Tower tower) {
 		//tower.lastBlock=tower.blocks.get(tower.blocks.size()-1);
